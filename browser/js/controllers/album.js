@@ -1,4 +1,4 @@
-app.controller('AlbumCtrl', function ($scope, $http, $rootScope, StatsFactory) {
+app.controller('AlbumCtrl', function ($scope, $http, $rootScope, StatsFactory, PlayerFactory) {
 
 	$http.get('/api/albums/561ea20a85bb44629dac8e04')
 	.then(function (response) {
@@ -21,11 +21,20 @@ app.controller('AlbumCtrl', function ($scope, $http, $rootScope, StatsFactory) {
 	});
 
 	$scope.start = function (s) {
-		$rootScope.$broadcast('startIt', {
-			song: s,
-			album: $scope.album
-		});
-	};
+		obj = {}
+		obj.song = s
+		obj.album = $scope.album
+		PlayerFactory.start(obj)
+	}
+
+	$scope.isPlaying = function() {
+		return PlayerFactory.isPlaying;
+	}
+
+	$scope.currentSong = function() {
+		return PlayerFactory.getCurrentSong();
+	}
+
 
 	$scope.$on('songLoad', function (evt, song) {
 		$scope.currentSong = song;

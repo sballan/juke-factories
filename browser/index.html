@@ -47,9 +47,9 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="song in album.songs" ng-class="{active: currentSong === song}">
+						<tr ng-repeat="song in album.songs" ng-class="{active: currentSong() === song}">
 							<td>
-								<button ng-hide="currentSong === song" ng-click="start(song)" class="btn btn-default btn-xs">
+								<button ng-hide="currentSong() === song && isPlaying()" ng-click="start(song)" class="btn btn-default btn-xs">
 									<span class="glyphicon glyphicon-play"></span>
 								</button>
 							</td>
@@ -63,14 +63,14 @@
 		</div>
 
 		<footer>
-			<div ng-controller="PlayerCtrl" ng-show="currentSong">
+			<div ng-controller="PlayerCtrl" ng-show="currentSong()">
 				<div class="pull-left">
 					<button ng-click="back()" class="btn btn-default">
 						<span class="glyphicon glyphicon-step-backward"></span>
 					</button>
 					<button ng-click="toggle()" class="btn btn-default">
-						<span ng-if="!isPlaying" class="glyphicon glyphicon-play"></span>
-						<span ng-if="isPlaying" class="glyphicon glyphicon-pause"></span>
+						<span ng-if="isPlaying()===false" class="glyphicon glyphicon-play"></span>
+						<span ng-if="isPlaying()" class="glyphicon glyphicon-pause"></span>
 					</button>
 					<button ng-click="forward()" class="btn btn-default">
 						<span class="glyphicon glyphicon-step-forward"></span>
@@ -78,7 +78,7 @@
 				</div>
 				<div class="bar">
 					<div class="progress">
-						<div class="progress-bar" ng-style="{width: progress + '%'}" style="transition:none;"></div>
+						<div class="progress-bar" ng-style="{width: progress() + '%'}" style="transition:none;"></div>
 					</div>
 				</div>
 			</div>
