@@ -1,16 +1,27 @@
-app.factory('PlayerFactory', function () {
+app.factory('PlayerFactory', function ($rootScope) {
 	var audio = document.createElement('audio');
 	var currentSong = null;
 	var progress;
 	var songs;
+
+
+	audio.addEventListener('timeupdate', function () {
+		$rootScope.$apply(function() {
+			data.setProgress(100 * audio.currentTime / audio.duration)
+		})
+	});
+
+	audio.addEventListener('ended', function () {
+		$rootScope.$apply(function() {
+			data.next();
+		})
+	});
 
 	function moveTo (index){
 		console.dir(songs);
 		console.log("index is:", index)
 		index += songs.length;
 		index %= songs.length;
-		console.log("index is:", index)
-		console.log("song at idx17 is:", songs[17])
 		data.start({song: songs[index]});
 
 	}
@@ -24,6 +35,10 @@ app.factory('PlayerFactory', function () {
 
 	var data = {
 		start: function (obj) {
+			if(obj.hasOwnProperty('audioUrl')) {
+				var temp = {song: obj};
+				obj = temp;
+			}
 			if (currentSong == obj.song){
 				this.play();
 				return;
@@ -42,7 +57,9 @@ app.factory('PlayerFactory', function () {
 			audio.pause();
 			this.isPlaying = false;
 		},
-		resume: null,
+		resume: function() {
+			this.play();
+		},
 		isPlaying: false,
 		getCurrentSong: function() { return currentSong },
 		setCurrentSong: function(song) {
