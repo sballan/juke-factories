@@ -15,7 +15,6 @@
 </head>
 <body ng-app="juke">
 	<div id="main" class="container-fluid">
-
 		<div class="col-xs-2">
 			<sidebar>
 				<section>
@@ -26,14 +25,44 @@
 			</sidebar>
 		</div>
 
-		<div class="col-xs-10">
-			<div class="album" ng-controller="AlbumCtrl">
+		<div class="col-xs-10" >
+			<div ng-controller="AlbumsViewer">
+			    <h3>Albums</h3>
+			    <div class="row">
+			        <div class="col-xs-4">
+			            <div class="thumbnail">
+			                <img src="http://placeholdit.imgix.net/~text?txtsize=33&txt=ALBUMoneIMAGE&w=300&h=300">
+			                <div class="caption">
+			                    <h5>
+			                        <a href="#">ALBUM ONE NAME HERE</a>
+			                    </h5>
+			                    <small>NUMBER OF SONGS HERE songs</small>
+			                </div>
+			            </div>
+			        </div>
+			        <div class="col-xs-4">
+			            <div class="thumbnail">
+			                <img src="http://placeholdit.imgix.net/~text?txtsize=33&txt=ALBUMtwoIMAGE&w=300&h=300">
+			                <div class="caption">
+			                    <h5>
+			                        <a href="#">ALBUM TWO NAME HERE</a>
+			                    </h5>
+			                    <small>NUMBER OF SONGS HERE songs</small>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+
+
+
+
+			<div class="album" ng-controller="AlbumCtrl" ng-hide="true">
 				<p>
 					<h3>
 					{{ album.name }}
 					<span id="album-minutes">{{ album.duration }}</span>
 					</h3>
-
 
 					<img ng-src="{{ album.imageUrl }}" class="img-thumbnail">
 				</p>

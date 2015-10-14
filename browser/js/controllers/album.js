@@ -16,7 +16,6 @@ app.controller('AlbumCtrl', function ($scope, $http, $rootScope, StatsFactory, P
 		StatsFactory.totalTime(album)
 		.then(function(albumDuration) {
 			$scope.album.duration = Math.floor(albumDuration / 60) + " min";
-			console.log("Total Duraction is ", $scope.albumDuration)
 		})
 	});
 
