@@ -27,9 +27,9 @@ app.controller('AlbumsViewer', function($scope, $http, $rootScope) {
 		}
 	})
 
-	$scope.pickAlbum = function(type, album){
+	$scope.pickAlbum = function(type, albumId){
 		$scope.show = false;
-		$rootScope.$broadcast('viewSwap', {type: type, album: album});
+		$rootScope.$broadcast('viewSwap', {type: type, albumId: albumId});
 	}
 
 	/*
