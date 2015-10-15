@@ -8,111 +8,109 @@
 	<script src="/lodash/index.js"></script>
 	<script src="/angular/angular.js"></script>
 	<script src="/js/module.js"></script>
-	<script src="/js/controllers/album.js"></script>
+	<script src="/js/controllers/albumList.js"></script>
+	<script src="/js/controllers/sidebar.js"></script>
+	<script src="/js/controllers/albumsViewer.js"></script>
 	<script src="/js/controllers/player.js"></script>
 	<script src="/js/factories/stats.js"></script>
 	<script src="/js/factories/player.js"></script>
 </head>
 <body ng-app="juke">
-	<div id="main" class="container-fluid">
-		<div class="col-xs-2">
+<div id="main" class="container-fluid">
+
+<!-- ***** Start Sidebar ***** -->
+		<div ng-controller="SidebarCtrl" class="col-xs-2">
 			<sidebar>
 				<section>
 					<h5 class="playlist-item active">
-						<a href="#">ALBUMS</a>
+						<a ng-click="viewAlbums('showAlbumsView')" href="#">ALBUMS</a>
 					</h5>
 				</section>
 			</sidebar>
 		</div>
+<!-- ***** End Sidebar ***** -->
 
-		<div class="col-xs-10" >
-			<div ng-controller="AlbumsViewer">
-			    <h3>Albums</h3>
-			    <div class="row">
-			        <div class="col-xs-4">
-			            <div class="thumbnail">
-			                <img src="http://placeholdit.imgix.net/~text?txtsize=33&txt=ALBUMoneIMAGE&w=300&h=300">
-			                <div class="caption">
-			                    <h5>
-			                        <a href="#">ALBUM ONE NAME HERE</a>
-			                    </h5>
-			                    <small>NUMBER OF SONGS HERE songs</small>
-			                </div>
-			            </div>
-			        </div>
-			        <div class="col-xs-4">
-			            <div class="thumbnail">
-			                <img src="http://placeholdit.imgix.net/~text?txtsize=33&txt=ALBUMtwoIMAGE&w=300&h=300">
-			                <div class="caption">
-			                    <h5>
-			                        <a href="#">ALBUM TWO NAME HERE</a>
-			                    </h5>
-			                    <small>NUMBER OF SONGS HERE songs</small>
-			                </div>
-			            </div>
-			        </div>
-			    </div>
-			</div>
+<!-- ***** Start Main Area ***** -->
+	<div class="col-xs-10" >
+<!-- *++++++++* Start Album Viewer *++++++++* -->
+		<div ng-controller="AlbumsViewer" ng-show="show">
+		    <h3>Albums</h3>
 
-
-
-
-			<div class="album" ng-controller="AlbumCtrl" ng-hide="true">
-				<p>
-					<h3>
-					{{ album.name }}
-					<span id="album-minutes">{{ album.duration }}</span>
-					</h3>
-
-					<img ng-src="{{ album.imageUrl }}" class="img-thumbnail">
-				</p>
-				<table class='table'>
-					<thead>
-						<tr>
-							<th></th>
-							<th>Name</th>
-							<th>Artists</th>
-							<th>Genres</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="song in album.songs" ng-class="{active: currentSong() === song}">
-							<td>
-								<button ng-hide="currentSong() === song && isPlaying()" ng-click="start(song)" class="btn btn-default btn-xs">
-									<span class="glyphicon glyphicon-play"></span>
-								</button>
-							</td>
-							<td>{{ song.name }}</td>
-							<td><span ng-repeat="artist in song.artists">{{ artist.name }} </span></td>
-							<td>{{ song.genres.join(', ') }}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+		    <div class="row">
+		        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="album in albums">
+		            <div class="thumbnail">
+		                <img ng-click="pickAlbum('showAlbumList', album)"  ng-src="{{ album.imageUrl }}">
+		                <div class="caption">
+		                    <h5>
+		                        <a ng-click="pickAlbum('showAlbumList', album)" href="#">{{ album.name }}</a>
+		                    </h5>
+		                    <small>{{album.songs.length}} songs</small>
+		                </div>
+		            </div>
+		        </div>
+				</div>
 		</div>
+<!-- ********** End Album Viewer ********** -->
 
-		<footer>
-			<div ng-controller="PlayerCtrl" ng-show="currentSong()">
-				<div class="pull-left">
-					<button ng-click="back()" class="btn btn-default">
-						<span class="glyphicon glyphicon-step-backward"></span>
-					</button>
-					<button ng-click="toggle()" class="btn btn-default">
-						<span ng-if="isPlaying()===false" class="glyphicon glyphicon-play"></span>
-						<span ng-if="isPlaying()" class="glyphicon glyphicon-pause"></span>
-					</button>
-					<button ng-click="forward()" class="btn btn-default">
-						<span class="glyphicon glyphicon-step-forward"></span>
-					</button>
-				</div>
-				<div class="bar">
-					<div class="progress">
-						<div class="progress-bar" ng-style="{width: progress() + '%'}" style="transition:none;"></div>
-					</div>
-				</div>
-			</div>
-		</footer>
+<!-- *++++++++* Start Album List View *++++++++* -->
+		<div class="album" ng-controller="AlbumListCtrl" ng-show="show">
+			<p>
+				<h3>
+				{{ album.name }}
+				<span id="album-minutes">{{ album.duration }}</span>
+				</h3>
+
+				<img ng-src="{{ album.imageUrl }}" class="img-thumbnail">
+			</p>
+			<table class='table'>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Name</th>
+						<th>Artists</th>
+						<th>Genres</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="song in album.songs" ng-class="{active: currentSong() === song}">
+						<td>
+							<button ng-hide="currentSong() === song && isPlaying()" ng-click="start(song)" class="btn btn-default btn-xs">
+								<span class="glyphicon glyphicon-play"></span>
+							</button>
+						</td>
+						<td>{{ song.name }}</td>
+						<td><span ng-repeat="artist in song.artists">{{ artist.name }} </span></td>
+						<td>{{ song.genres.join(', ') }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+<!-- ********** End Album List View ********** -->
 
 	</div>
+<!-- ***** End Main Area ***** -->
+	<footer>
+		<div ng-controller="PlayerCtrl" ng-show="currentSong()">
+			<div class="pull-left">
+				<button ng-click="back()" class="btn btn-default">
+					<span class="glyphicon glyphicon-step-backward"></span>
+				</button>
+				<button ng-click="toggle()" class="btn btn-default">
+					<span ng-if="isPlaying()===false" class="glyphicon glyphicon-play"></span>
+					<span ng-if="isPlaying()" class="glyphicon glyphicon-pause"></span>
+				</button>
+				<button ng-click="forward()" class="btn btn-default">
+					<span class="glyphicon glyphicon-step-forward"></span>
+				</button>
+			</div>
+			<div class="bar">
+				<div class="progress">
+					<div class="progress-bar" ng-style="{width: progress() + '%'}" style="transition:none;"></div>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+</div>
 </body>
 </html>

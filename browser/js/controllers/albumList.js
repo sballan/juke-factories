@@ -1,4 +1,7 @@
-app.controller('AlbumCtrl', function ($scope, $http, $rootScope, StatsFactory, PlayerFactory) {
+app.controller('AlbumListCtrl', function ($scope, $http, $rootScope, StatsFactory, PlayerFactory) {
+
+	$scope.show = false;
+
 
 	$http.get('/api/albums/561ea20a85bb44629dac8e04')
 	.then(function (response) {
@@ -34,9 +37,24 @@ app.controller('AlbumCtrl', function ($scope, $http, $rootScope, StatsFactory, P
 		return PlayerFactory.getCurrentSong();
 	}
 
-
+	//TODO MAYBE DELETE?
 	$scope.$on('songLoad', function (evt, song) {
 		$scope.currentSong = song;
 	});
+
+	$rootScope.$on('viewSwap', function(evt, data) {
+		if(data.album) $scope.album = data.album
+		switch(data.type) {
+			case 'showAlbumList':
+				$scope.show = true;
+				break;
+			case 'showAlbumsView':
+				$scope.show = false;
+				break;
+			default:
+				break;
+		}
+
+	})
 
 });

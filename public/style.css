@@ -51,3 +51,7 @@ footer {
   font-weight: lighter;
   font-size: 70%;
 }
+
+.album-image {
+  width: 10%;
+}

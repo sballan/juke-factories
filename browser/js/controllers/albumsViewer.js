@@ -1,6 +1,7 @@
 //albumViewer.js
-app.controller('AlbumsViewer', function($scope, $http) {
-	console.log(Anything)
+app.controller('AlbumsViewer', function($scope, $http, $rootScope) {
+
+	$scope.show = true;
 	$http.get('/api/albums/')
 	.then(function (response) {
 
@@ -8,22 +9,40 @@ app.controller('AlbumsViewer', function($scope, $http) {
 		//IMAGES
 		albums.forEach(function(album){
 			album.imageUrl = '/api/albums/' + album._id + '.image'
-		// albums.imageUrl = '/api/albums/' + album._id + '.image';
 		})
-		console.log("Our albums dirred: ");
-		console.dir(albums);
-
-		//something to show ALBUM NAME
-		//something to show SONGS
-
-		// var albumArtists = _.indexBy(album.artists, '_id');
-		// album.songs.forEach(function (s) {
-		// 	s.audioUrl = '/api/songs/' + s._id + '.audio';
-		// 	s.artists = s.artists.map(function (artistId) {
-		// 		return albumArtists[artistId];
-		// 	});
-		// });
-
 			$scope.albums = albums;
 	})
+
+
+	$rootScope.$on('viewSwap', function(evt, data) {
+		switch(data.type) {
+			case 'showAlbumList':
+				$scope.show = false;
+				break;
+			case 'showAlbumsView':
+				$scope.show = true;
+				break;
+			default:
+				break;
+		}
+	})
+
+	$scope.pickAlbum = function(type, album){
+		$scope.show = false;
+		$rootScope.$broadcast('viewSwap', {type: type, album: album});
+	}
+
+	/*
+		This may be a better way to do the viewSwap:
+
+		$rootScope.$on('viewSwap', function (evt, viewName) {
+    $scope.showMe = (viewName == 'allAlbums');
+});
+// there'll also need to be something like below
+// which we can use with ng-click in the html
+$scope.viewOneAlbum = function () {
+    $rootScope.$broadcast('viewSwap', 'oneAlbum');
+};
+...
+	*/
 })
